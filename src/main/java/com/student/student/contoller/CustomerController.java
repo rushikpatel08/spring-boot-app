@@ -2,8 +2,10 @@
 package com.student.student.contoller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.student.student.entity.Customer;
+import com.student.student.repository.CustomerRepository;
 import com.student.student.service.CustomerService;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+    
     @PostMapping("/insert")    
     public Customer InsertCustomer(@RequestBody Customer customer)
     {
@@ -55,5 +60,11 @@ public class CustomerController {
     public Customer UpdateCustomer(@RequestBody Customer customer)
     {
         return customerService.UpdateCustomer(customer);
+    }
+
+    @GetMapping("/query")
+    public List<Customer> findByName(@RequestParam String name)
+    {
+        return customerRepository.findByName(name);
     }
 }
