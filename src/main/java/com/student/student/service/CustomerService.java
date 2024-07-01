@@ -41,5 +41,12 @@ public class CustomerService {
     {
         customerRepository.findById(customer.getId()).orElseThrow();
         return customerRepository.save(customer);  
+ 
+    }
+
+    public List<Customer> findByName(String name)
+    {
+        return customerRepository.findByName(name);
     }
 }
+
