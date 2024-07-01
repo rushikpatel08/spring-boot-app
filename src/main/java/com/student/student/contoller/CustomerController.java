@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
+
 public class CustomerController {
  
 
@@ -61,6 +62,8 @@ public class CustomerController {
     {
         return customerService.UpdateCustomer(customer);
     }
+
+    
 
     @GetMapping("/query")
     public List<Customer> findByName(@RequestParam String name)

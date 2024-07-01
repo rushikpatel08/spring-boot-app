@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.student.student.entity.Customer;
 import java.util.List;
 
-
-
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer,Integer>{
+public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 
-    @Query("SELECT c from customer c where c.name like %?1%")
+
+    @Query("SELECT c FROM Customer c WHERE c.name LIKE %?1%")
     List<Customer> findByName(String name);
 }
