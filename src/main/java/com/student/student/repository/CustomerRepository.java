@@ -15,4 +15,8 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer> {
     @Query("SELECT c FROM Customer c WHERE c.name LIKE %?1%")
     List<Customer> findByName(String name);
     
+    @Query("SELECT c FROM Customer c WHERE c.department = ?1")
+    List<Customer> findByDepartment(String department);
+
+
 }

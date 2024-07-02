@@ -48,5 +48,10 @@ public class CustomerService {
     {
         return customerRepository.findByName(name);
     }
+
+    public List<Customer> findByDepartment(String department)
+    {
+        return customerRepository.findByDepartment(department);
+    }
 }
 

@@ -64,4 +64,10 @@ public class CustomerController {
     {
         return customerService.findByName(name);
     }
+
+    @GetMapping("/department")
+    public List<Customer> findByDepartment(@RequestParam String department)
+    {
+        return customerService.findByDepartment(department);
+    }
 }
