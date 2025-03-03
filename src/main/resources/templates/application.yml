@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://rushik-first-database.ccx8c68omsvi.us-east-1.rds.amazonaws.com:3306/rushik_first_database
+    username: admin
+    password: Rushik123
+    driver-class-name: com.mysql.cj.jdbc.Driver

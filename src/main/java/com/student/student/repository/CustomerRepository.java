@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 
-    
-
     @Query("SELECT c FROM Customer c WHERE c.name LIKE %?1%")
     List<Customer> findByName(String name);
     

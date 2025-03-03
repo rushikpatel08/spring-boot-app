@@ -14,7 +14,7 @@ public class Customer
 {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String email;
@@ -93,6 +93,7 @@ public class Customer
 
     public Customer(Integer id, String name, String email, String phone, String address, String gender,
             String department,String skills){
+
         this.id = id;
         this.name = name;
         this.email = email;

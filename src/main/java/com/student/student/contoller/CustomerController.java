@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("http://rushik-first-s3bucket.s3-website-us-east-1.amazonaws.com")
 
 public class CustomerController {
  
