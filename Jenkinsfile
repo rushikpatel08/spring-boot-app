@@ -25,14 +25,7 @@ pipeline {
         stage('Deploy to EC2') {
         steps {
             sshagent(['ec2-key-pair']) {
-                sh '''
-                scp -o StrictHostKeyChecking=no target/*.jar ${EC2_USER}@${EC2_HOST}:${APP_PATH}/app.jar
-                ssh ${EC2_USER}@${EC2_HOST} <<EOF
-                    sudo systemctl stop springboot-app
-                    mv ${APP_PATH}/app.jar ${APP_PATH}/springboot-app.jar
-                    sudo systemctl start springboot-app
-                EOF
-                '''
+                sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com "echo SSH Connection Successful"'
             }
         }
     }
