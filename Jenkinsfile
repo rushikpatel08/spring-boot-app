@@ -24,17 +24,11 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ec2-key-pair']) {
-                    sh '''
-                        echo "Stopping existing application..."
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "pkill -f spring-boot-app.jar || echo 'No process found'"
-
-                        echo "Copying new JAR file..."
-                        scp -o StrictHostKeyChecking=no target/springboot_aws.jar ${EC2_USER}@${EC2_HOST}:${APP_PATH}
-
-                        echo "Starting new application..."
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "nohup java -jar ${APP_PATH} > app.log 2>&1 &"
-                    '''
+                sshagent(['ec2-user']) {
+                    sh """
+                        echo 'Stopping existing application...'
+                        ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'sudo pkill -f spring-boot-app.jar || echo "No process found"'
+                    """
                 }
             }
         }
