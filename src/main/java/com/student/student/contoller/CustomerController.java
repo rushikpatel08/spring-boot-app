@@ -34,7 +34,7 @@ public class CustomerController {
        return customerService.InsertCustomer(customer);
     }
 
-    @GetMapping("/display2") 
+    @GetMapping("/display") 
     public List<Customer> DisplayCustomer()
     {
         return customerService.DisplayCustomer();
