@@ -22,23 +22,13 @@ pipeline {
             }
         }
 
-        stage('Test SSH Connection') {
-    steps {
-        script {
-            def sshCommand = "ssh -v -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'echo SSH connection successful'"
-            def status = sh(script: sshCommand, returnStatus: true)
-            if (status != 0) {
-                error "SSH connection failed!"
-            }
-        }
-    }
-}
+        
 
         stage('Deploy to EC2') {
             steps {
                 sshagent(['ec2-key-pair']) {
                     sh "scp -o StrictHostKeyChecking=no target/springboot_aws.jar ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com:/home/ec2-user/"
-            sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'nohup java -jar /home/ec2-user/springboot_aws.jar > /dev/null 2>&1 &'"
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'nohup java -jar /home/ec2-user/springboot_aws.jar > /dev/null 2>&1 &'"
                 }
             }
         }
