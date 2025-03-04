@@ -24,7 +24,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ec2-user']) {
+                sshagent(['ec2-key-pair']) {
                     sh """
                         echo 'Stopping existing application...'
                         ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST 'sudo pkill -f spring-boot-app.jar || echo "No process found"'
