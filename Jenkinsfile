@@ -17,7 +17,7 @@ pipeline {
 
         stage('Build Spring Boot App') {
             steps {
-                sh 'chmod +x mvnw'  // Ensure mvnw is executable
+                sh 'chmod +x mvnw'  
                 sh './mvnw clean package -DskipTests'
             }
         }
@@ -27,7 +27,13 @@ pipeline {
                 sshagent(['ec2-user']) {
                     sh """
                         echo 'Stopping existing application...'
-                        ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'sudo pkill -f spring-boot-app.jar || echo "No process found"'
+                        ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST 'sudo pkill -f spring-boot-app.jar || echo "No process found"'
+                        
+                        echo 'Uploading new application...'
+                        scp -o StrictHostKeyChecking=no target/*.jar $EC2_USER@$EC2_HOST:$APP_PATH
+                        
+                        echo 'Starting new application...'
+                        ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST 'nohup java -jar $APP_PATH > app.log 2>&1 &'
                     """
                 }
             }
