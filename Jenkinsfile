@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        EC2_USER = 'ubuntu'
+        EC2_USER = 'ec2-user'
         EC2_HOST = 'ec2-3-92-255-138.compute-1.amazonaws.com'
-        APP_PATH = '/home/ubuntu/spring-boot-app.jar'
+        APP_PATH = '/home/ec2-user/spring-boot-app.jar'
         REPO_URL = 'https://github.com/rushikpatel08/spring-boot-app.git'
     }
 
