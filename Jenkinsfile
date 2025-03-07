@@ -4,8 +4,9 @@ pipeline {
     environment {
         EC2_USER = 'ec2-user'
         EC2_HOST = 'ec2-3-92-255-138.compute-1.amazonaws.com'
-        APP_PATH = '/home/ec2-user/spring-boot-app.jar'
         REPO_URL = 'https://github.com/rushikpatel08/spring-boot-app.git'
+        IMAGE_NAME = 'springboot_app'
+        CONTAINER_NAME = 'springboot_container'
     }
 
     stages {
@@ -15,20 +16,31 @@ pipeline {
             }
         }
 
-        stage('Build Spring Boot App') {
+        stage('Build Docker Image') {
             steps {
-                sh 'chmod +x mvnw'  
-                sh './mvnw clean package -DskipTests'
+                sh 'docker build -t ${IMAGE_NAME} .'
             }
         }
 
-        
+        stage('Push to Docker Hub') {
+            steps {
+                withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                    sh 'docker tag ${IMAGE_NAME} your-dockerhub-username/${IMAGE_NAME}'
+                    sh 'docker push your-dockerhub-username/${IMAGE_NAME}'
+                }
+            }
+        }
 
         stage('Deploy to EC2') {
             steps {
                 sshagent(['ec2-key-pair']) {
-                    sh "scp -o StrictHostKeyChecking=no target/springboot_aws.jar ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com:/home/ec2-user/"
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-92-255-138.compute-1.amazonaws.com 'nohup java -jar /home/ec2-user/springboot_aws.jar > /dev/null 2>&1 &'"
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} '
+                        docker pull your-dockerhub-username/${IMAGE_NAME} &&
+                        docker stop ${CONTAINER_NAME} || true &&
+                        docker rm ${CONTAINER_NAME} || true &&
+                        docker run -d --name ${CONTAINER_NAME} -p 8080:8080 your-dockerhub-username/${IMAGE_NAME}'
+                    """
                 }
             }
         }
