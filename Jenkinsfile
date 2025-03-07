@@ -22,7 +22,11 @@ pipeline {
             }
         }
 
-        
+        stage('Test Spring Boot App') {
+            steps {
+                sh 'mvn test'
+            }
+        }
 
         stage('Deploy to EC2') {
             steps {
