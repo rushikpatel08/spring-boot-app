@@ -22,16 +22,33 @@ pipeline {
             }
         }
 
-        
+        stage('Run Unit Tests') {
+            steps {
+                sh './mvnw test'
+            }
+        }
 
         stage('Deploy to EC2') {
             steps {
                 sshagent(['ec2-key-pair']) {
-                    sh "scp -o StrictHostKeyChecking=no target/springboot_aws.jar ${EC2_USER}@${EC2_HOST}:${APP_PATH}"
-                    sh "ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'nohup java -jar ${APP_PATH} > /dev/null 2>&1 &'"
+                    sh "scp -o StrictHostKeyChecking=no target/*.jar ${EC2_USER}@${EC2_HOST}:${APP_PATH}"
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+                        pkill -f ${APP_PATH} || true
+                        nohup java -jar ${APP_PATH} > /dev/null 2>&1 &
+                        EOF
+                    """
                 }
             }
         }
+    }
 
+    post {
+        success {
+            echo 'Deployment Successful!'
+        }
+        failure {
+            echo 'Deployment Failed. Check the logs!'
+        }
     }
 }
